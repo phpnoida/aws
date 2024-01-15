@@ -1,1 +1,52 @@
+# First decide what AWS instance type is required for the project where you need to think about which OS ,how many cpus and size of RAM required
+# AWS has divided its instance type into 5 families which are as follows 
+1. General Purpose (balance between CPU vs memory RAM vs network bandwidth, suitable for web servers) ex t series, 
+2. Compute-optimized (when more core cpus are required ,suitable for media transcoding , machine learning , gaming servers , high performance web server) 
+3. Memory optimized (when you are loading more data in RAM means when you need high RAM ) 
+4. Storage optimized 
+5. Accelerated computing 
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Second decide about AWS pricing model which are followings :
+1.On Demand no commitment required
+2.Saving Plans(Standard or convertible) where we need to commit for 1 to 3 years
+3.Spot 
+4.Dedicated 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Third get Elastic/Static IP 
+We must get an elastic IP from AWS and later once ec2 is up and running then we will attach this elastic IP to that ec2 , why we do so ? EC2 public ip provided by AWS default gets changed 
+whenever we reboot or restart the ec2 .
+Note : Kindly remember to diassociate the elastic ip and delete it when it is not in use otherwise AWS will charge you for this .
+
+--Spin Ec2------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Fourth spin up the ec2 with following basic details :(please decide on which region you want to spin that ec2)
+1.name of your web server i.e dsobs
+2.o.s i.e ubuntu 
+3.instance type for cpu and ram 
+4.key pair login for ssh
+5.root volume i.e 8gb 
+6.network settings keep default for now but you can select az's from here
+
+--Security groups-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Fifth step once the ec2 is up and running ,let us change the security group 
+Security groups are like firewal where we write rules for which portNo and Ip Address is allowed to access our ec2 ,rest all will be blocked 
+By default all inbound rules are blocked 
+By default all outbound rules are allowed
+
+so edit inbound rules and allow portNo 22 so that we can ssh our ec2 remotely 
+Type           PORT   Source
+SSH            22     My ip |Anywhere ipv4
+HTTP           80
+HTTPS          443
+Custom TCP     27017
+
+--SSH Your ec2 remotely-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+once you donwload the ssh key in your system , check the permission of that pem file 
+you will notice rw for owner , r for group and r for other , means any users of that machine can access that pem file and AWS will generate error when you try to access ec2
+so chnage the permission so that only owner has permission for read and write nobody else have even read permission .
+
+chmod  400 amit.pem 
+
+ssh -i amit.pem ubuntu@ip
